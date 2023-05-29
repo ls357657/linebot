@@ -16,22 +16,19 @@ def checkword(w):
     url = 'https://www.moedict.tw/uni/' + w
     r = requests.get(url)
     datas = r.json()
-    print('國字：', datas['title'])
-    print('部首：', datas['radical'])
-    print('筆劃：', datas['stroke_count'])
-    print()
+    msg = '國字：' + datas['title'] + '\n'
+    msg += '部首：' + datas['radical'] + '\n'
+    msg += '筆劃：' + str(datas['stroke_count']) + '\n\n'
     for i in range(len(datas['heteronyms'])):
-        print('注音：', datas['heteronyms'][i]['bopomofo'])
-        print('拼音：', datas['heteronyms'][i]['pinyin'])    
+        msg += '注音：' + datas['heteronyms'][i]['bopomofo'] + '\n'
+        msg += '拼音：' + datas['heteronyms'][i]['pinyin'] + '\n'    
         for j in range(len(datas['heteronyms'][i]['definitions'])):
-            print('[{}] {}'.format(
-                datas['heteronyms'][i]['definitions'][j]['type'],
-                datas['heteronyms'][i]['definitions'][j]['def']))
-        print()
-
-
-w = input("請輸入要查詢的國字：")
-checkword(w)
+            if 'type' in datas['heteronyms'][i]['definitions'][j]:
+                msg += '[{}] {}\n'.format(
+                    datas['heteronyms'][i]['definitions'][j]['type'],
+                    datas['heteronyms'][i]['definitions'][j]['def'])
+        msg += '\n'
+    return msg
 
 app = Flask(__name__)
 
