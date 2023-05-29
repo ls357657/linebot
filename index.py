@@ -10,6 +10,29 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
+import requests
+
+def checkword(w):
+    url = 'https://www.moedict.tw/uni/' + w
+    r = requests.get(url)
+    datas = r.json()
+    print('國字：', datas['title'])
+    print('部首：', datas['radical'])
+    print('筆劃：', datas['stroke_count'])
+    print()
+    for i in range(len(datas['heteronyms'])):
+        print('注音：', datas['heteronyms'][i]['bopomofo'])
+        print('拼音：', datas['heteronyms'][i]['pinyin'])    
+        for j in range(len(datas['heteronyms'][i]['definitions'])):
+            print('[{}] {}'.format(
+                datas['heteronyms'][i]['definitions'][j]['type'],
+                datas['heteronyms'][i]['definitions'][j]['def']))
+        print()
+
+
+w = input("請輸入要查詢的國字：")
+checkword(w)
+
 app = Flask(__name__)
 
 line_bot_api = LineBotApi('ZuX8m+OITcOXB+dDcmvCknrsbtUJ+c7mJwQubVFwlNFNct8c/YEORet/X4giQdezRDd/Ysb30DwBZV1Kjxx8oMRlI+koo3ZkWUFZIyQ6RIBmuxMzX/LmUBQf58EskP6hY5ixgr27JKJnxE3ZXS1acAdB04t89/1O/w1cDnyilFU=')
@@ -39,7 +62,7 @@ def callback():
 def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text=checkword(event.message.text))
 
 
 if __name__ == "__main__":
