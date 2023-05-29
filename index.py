@@ -13,7 +13,7 @@ from linebot.models import (
 app = Flask(__name__)
 
 line_bot_api = LineBotApi('ZuX8m+OITcOXB+dDcmvCknrsbtUJ+c7mJwQubVFwlNFNct8c/YEORet/X4giQdezRDd/Ysb30DwBZV1Kjxx8oMRlI+koo3ZkWUFZIyQ6RIBmuxMzX/LmUBQf58EskP6hY5ixgr27JKJnxE3ZXS1acAdB04t89/1O/w1cDnyilFU=') #長的
-handler = WebhookHandler('15b26426acc8b137890028c8d4f1eef1') #短的
+handler1 = WebhookHandler('15b26426acc8b137890028c8d4f1eef1') #短的
 
 
 @app.route("/callback", methods=['POST'])
@@ -27,7 +27,7 @@ def callback():
 
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        handler1.handle(body, signature)
     except InvalidSignatureError:
         print("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
@@ -35,7 +35,7 @@ def callback():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessage)
+@handler1.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
